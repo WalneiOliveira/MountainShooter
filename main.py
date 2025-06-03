@@ -22,5 +22,5 @@ while running:
             running = False
 
 # ending Pygame
-print('program end')
+print('quiting...')
 pygame.quit()
