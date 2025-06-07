@@ -1,15 +1,12 @@
 name: Build MountainShooter
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+on: [push, workflow_dispatch]
 
 jobs:
   build:
     runs-on: windows-latest
     defaults:
       run:
-        shell: pwsh
+        shell: cmd  # Usa Command Prompt em vez de PowerShell
 
     steps:
       - name: Checkout code
@@ -26,14 +23,25 @@ jobs:
           pip install pyinstaller==6.2.0
           pip install -r requirements.txt
 
+      - name: Verify assets folder
+        run: |
+          if not exist "asset" (
+            echo Error: Pasta 'asset' não encontrada!
+            exit /b 1
+          )
+          echo Assets encontrados:
+          dir /b asset
+
       - name: Build executable
         run: |
           pyinstaller --onefile --windowed --name MountainShooter --add-data "asset/*;asset" main.py
 
       - name: Create deployment package
         run: |
-          $version = Get-Date -Format "yyyyMMdd-HHmmss"
-          Compress-Archive -Path .\dist\MountainShooter.exe, .\asset\* -DestinationPath MountainShooter_$version.zip
+          mkdir package
+          copy dist\MountainShooter.exe package
+          xcopy asset package\asset /E /I
+          7z a MountainShooter_v%GITHUB_RUN_NUMBER%.zip .\package\*
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
