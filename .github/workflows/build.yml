@@ -1,14 +1,15 @@
-name: Build Windows EXE
+name: Build and Package MontainShooter
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-  build:
+  build-windows-exe:
+    name: Build Windows Executable
     runs-on: windows-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python 3.9
@@ -22,19 +23,26 @@ jobs:
           pip install pyinstaller==6.2.0
           pip install -r requirements.txt
 
-      - name: Build executable
+      - name: Build with PyInstaller
         run: |
           pyinstaller --onefile --windowed --name MontainShooter --add-data "assets/*;assets" main.py
 
-      - name: Create release package
+      - name: Create deployment package
         run: |
-          mkdir package
-          cp dist/MontainShooter.exe package/
-          cp -r assets package/
-          cd package && zip -r ../MontainShooter_${GITHUB_RUN_NUMBER}.zip *
+          # Create package structure
+          mkdir deploy
+          cp dist/MontainShooter.exe deploy/
+          cp -r assets deploy/
+          
+          # Create README file
+          echo "MontainShooter - Demo Game" > deploy/README.txt
+          echo "Created: $(date)" >> deploy/README.txt
+          
+          # Zip everything
+          7z a -tzip MontainShooter_${{ github.run_number }}.zip ./deploy/*
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: MontainShooter_Package
+          name: MontainShooter_Windows
           path: MontainShooter_*.zip
