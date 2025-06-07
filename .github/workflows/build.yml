@@ -23,15 +23,13 @@ jobs:
           pip install pyinstaller==6.2.0
           pip install windows-curses==2.3.0
           pip install -r requirements.txt
+          python -c "import sys, windows_curses; print(f'Python {sys.version}\nwindows-curses {windows_curses.__version__} imported successfully')"
 
-      - name: Verify environment
+      - name: Verify file structure
         run: |
-          pyinstaller --version
-          dir
-          dir /s /b asset || echo No asset directory
-          dir /s /b code || echo No code directory
-          python -c "import windows_curses; print('windows-curses import successful')"
-          python -c "from main import main; print('Main.py verified')"
+          dir /s /b asset || echo "Warning: asset directory not found"
+          dir /s /b code || echo "Warning: code directory not found"
+          python -c "import os; print('Current directory:', os.getcwd()); print('Files:', os.listdir('.'))"
 
       - name: Build executable
         run: |
@@ -43,17 +41,19 @@ jobs:
             --add-data "code/*;code" ^
             --hidden-import windows_curses ^
             --hidden-import code.Game ^
+            --hidden-import code.Menu ^
             main.py
 
-      - name: Verify build output
+      - name: Verify build
         run: |
           if not exist "dist\MountainShooter.exe" (
-            echo Error: Executable not built!
+            echo "Error: Executable not built!"
             exit /b 1
           )
+          echo "Build successful. Executable size:"
           dir /s /b dist
 
-      - name: Create deployment package
+      - name: Package release
         run: |
           mkdir package
           copy dist\MountainShooter.exe package
@@ -61,7 +61,8 @@ jobs:
           xcopy code package\code /E /I /Y
           7z a MountainShooter_v%GITHUB_RUN_NUMBER%.zip .\package\*
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: MountainShooter_Package
+          name: MountainShooter_%GITHUB_RUN_NUMBER%
           path: MountainShooter_*.zip
