@@ -4,37 +4,64 @@ on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: windows-latest
+    defaults:
+      run:
+        shell: cmd
+
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up Python
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.9
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-          
+
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install pyinstaller==6.2.0
+          pip install windows-curses==2.3.0
           pip install -r requirements.txt
-          
+
+      - name: Verify environment
+        run: |
+          pyinstaller --version
+          dir
+          dir /s /b asset || echo No asset directory
+          dir /s /b code || echo No code directory
+          python -c "import windows_curses; print('windows-curses import successful')"
+          python -c "from main import main; print('Main.py verified')"
+
       - name: Build executable
         run: |
-          pyinstaller --onefile --windowed --name MountainShooter --add-data "asset/*;asset" main.py
-          
-      - name: Verify assets
+          pyinstaller ^
+            --onefile ^
+            --windowed ^
+            --name MountainShooter ^
+            --add-data "asset/*;asset" ^
+            --add-data "code/*;code" ^
+            --hidden-import windows_curses ^
+            --hidden-import code.Game ^
+            main.py
+
+      - name: Verify build output
         run: |
-          if not exist "asset" (exit 1)
-          echo "Assets encontrados:"
-          dir /b asset
-          
-      - name: Create final package
+          if not exist "dist\MountainShooter.exe" (
+            echo Error: Executable not built!
+            exit /b 1
+          )
+          dir /s /b dist
+
+      - name: Create deployment package
         run: |
           mkdir package
           copy dist\MountainShooter.exe package
-          xcopy asset package\asset /E /I
-          7z a MountainShooter_Final.zip .\package\*
-          
+          xcopy asset package\asset /E /I /Y
+          xcopy code package\code /E /I /Y
+          7z a MountainShooter_v%GITHUB_RUN_NUMBER%.zip .\package\*
+
       - uses: actions/upload-artifact@v4
         with:
-          name: MountainShooter_Complete
-          path: MountainShooter_Final.zip
+          name: MountainShooter_Package
+          path: MountainShooter_*.zip
