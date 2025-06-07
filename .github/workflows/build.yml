@@ -6,13 +6,13 @@ jobs:
     runs-on: windows-latest
     defaults:
       run:
-        shell: cmd  # Usa Command Prompt em vez de PowerShell
+        shell: cmd
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.9
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
@@ -20,31 +20,28 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyinstaller==6.2.0
+          pip install windows-curses
+          pip install pyinstaller
           pip install -r requirements.txt
-
-      - name: Verify assets folder
-        run: |
-          if not exist "asset" (
-            echo Error: Pasta 'asset' não encontrada!
-            exit /b 1
-          )
-          echo Assets encontrados:
-          dir /b asset
 
       - name: Build executable
         run: |
-          pyinstaller --onefile --windowed --name MountainShooter --add-data "asset/*;asset" main.py
+          pyinstaller --onefile --windowed ^
+            --name MountainShooter ^
+            --add-data "asset/*;asset" ^
+            --hidden-import curses ^
+            --hidden-import windows-curses ^
+            main.py
 
-      - name: Create deployment package
+      - name: Create ZIP package
         run: |
           mkdir package
           copy dist\MountainShooter.exe package
           xcopy asset package\asset /E /I
-          7z a MountainShooter_v%GITHUB_RUN_NUMBER%.zip .\package\*
+          7z a MountainShooter.zip .\package\*
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: MountainShooter_Package
-          path: MountainShooter_*.zip
+          path: MountainShooter.zip
