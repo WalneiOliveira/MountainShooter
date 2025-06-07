@@ -6,7 +6,7 @@ jobs:
     runs-on: windows-latest
     defaults:
       run:
-        shell: cmd  # Usa Command Prompt em vez de PowerShell
+        shell: cmd  # Uses Command Prompt instead of PowerShell
 
     steps:
       - name: Checkout code
