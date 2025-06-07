@@ -1,15 +1,18 @@
-name: Build and Package MontainShooter
+name: Build MountainShooter
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
-  build-windows-exe:
-    name: Build Windows Executable
+  build:
     runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Python 3.9
@@ -23,26 +26,17 @@ jobs:
           pip install pyinstaller==6.2.0
           pip install -r requirements.txt
 
-      - name: Build with PyInstaller
+      - name: Build executable
         run: |
-          pyinstaller --onefile --windowed --name MontainShooter --add-data "assets/*;assets" main.py
+          pyinstaller --onefile --windowed --name MountainShooter --add-data "asset/*;asset" main.py
 
       - name: Create deployment package
         run: |
-          # Create package structure
-          mkdir deploy
-          cp dist/MontainShooter.exe deploy/
-          cp -r assets deploy/
-          
-          # Create README file
-          echo "MontainShooter - Demo Game" > deploy/README.txt
-          echo "Created: $(date)" >> deploy/README.txt
-          
-          # Zip everything
-          7z a -tzip MontainShooter_${{ github.run_number }}.zip ./deploy/*
+          $version = Get-Date -Format "yyyyMMdd-HHmmss"
+          Compress-Archive -Path .\dist\MountainShooter.exe, .\asset\* -DestinationPath MountainShooter_$version.zip
 
-      - name: Upload build artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: MontainShooter_Windows
-          path: MontainShooter_*.zip
+          name: MountainShooter_Package
+          path: MountainShooter_*.zip
