@@ -24,27 +24,40 @@ jobs:
           pip install pyinstaller==6.2.0
           pip install -r requirements.txt
 
-      - name: Verify imports
+      - name: Verify environment
         run: |
-          python -c "import windows_curses; print('windows-curses importado com sucesso')"
-          python -c "from main import main; print('Main.py verificado')"
+          pyinstaller --version
+          dir
+          dir /s /b asset || echo No asset directory
+          dir /s /b code || echo No code directory
+          python -c "import windows_curses; print('windows-curses import successful')"
 
       - name: Build executable
         run: |
-          pyinstaller --onefile --windowed ^
+          pyinstaller ^
+            --onefile ^
+            --windowed ^
             --name MountainShooter ^
             --add-data "asset/*;asset" ^
-            --add-data "code/*;code" ^  # Inclui a pasta code
+            --add-data "code/*;code" ^
             --hidden-import windows_curses ^
             --hidden-import code.Game ^
             main.py
+
+      - name: Verify build output
+        run: |
+          if not exist "dist\MountainShooter.exe" (
+            echo Error: Executable not built!
+            exit /b 1
+          )
+          dir /s /b dist
 
       - name: Create deployment package
         run: |
           mkdir package
           copy dist\MountainShooter.exe package
-          xcopy asset package\asset /E /I
-          xcopy code package\code /E /I
+          xcopy asset package\asset /E /I /Y
+          xcopy code package\code /E /I /Y
           7z a MountainShooter_v%GITHUB_RUN_NUMBER%.zip .\package\*
 
       - uses: actions/upload-artifact@v4
