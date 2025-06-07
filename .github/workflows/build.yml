@@ -1,0 +1,40 @@
+name: Build MountainShooter
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          
+      - name: Install dependencies
+        run: |
+          pip install pyinstaller==6.2.0
+          pip install -r requirements.txt
+          
+      - name: Build executable
+        run: |
+          pyinstaller --onefile --windowed --name MountainShooter --add-data "asset/*;asset" main.py
+          
+      - name: Verify assets
+        run: |
+          if not exist "asset" (exit 1)
+          echo "Assets encontrados:"
+          dir /b asset
+          
+      - name: Create final package
+        run: |
+          mkdir package
+          copy dist\MountainShooter.exe package
+          xcopy asset package\asset /E /I
+          7z a MountainShooter_Final.zip .\package\*
+          
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MountainShooter_Complete
+          path: MountainShooter_Final.zip
