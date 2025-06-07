@@ -20,8 +20,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install windows-curses==2.3.0
           pip install pyinstaller==6.2.0
+          pip install windows-curses==2.3.0
           pip install -r requirements.txt
 
       - name: Verify environment
@@ -31,6 +31,7 @@ jobs:
           dir /s /b asset || echo No asset directory
           dir /s /b code || echo No code directory
           python -c "import windows_curses; print('windows-curses import successful')"
+          python -c "from main import main; print('Main.py verified')"
 
       - name: Build executable
         run: |
