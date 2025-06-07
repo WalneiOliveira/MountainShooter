@@ -1,9 +1,24 @@
+import os
+import sys
 from code.Game import Game
+
+# Configuração especial para o PyInstaller
+if getattr(sys, 'frozen', False):
+    os.chdir(sys._MEIPASS)
 
 try:
     import curses
 except ImportError:
-    import windows-curses as curses  # Fallback para Windows
+    try:
+        import windows_curses as curses  # Nome correto do pacote
+        print("Using windows-curses fallback")
+    except ImportError:
+        print("Warning: curses not available - some features might not work")
+        curses = None  # Cria um objeto nulo para evitar erros
 
-game = Game()
-game.run()
+def main():
+    game = Game()
+    game.run()
+
+if __name__ == "__main__":
+    main()
