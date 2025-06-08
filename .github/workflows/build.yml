@@ -32,6 +32,7 @@ jobs:
           dir /s /b code || echo No code directory
           python -c "import windows_curses; print('windows-curses import successful')"
           python -c "from main import main; print('Main.py verified')"
+          python -c "from code.Game import Game; print('Game.py importado com sucesso')"  # <--- LINHA ADICIONADA
 
       - name: Build executable
         run: |
