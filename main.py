@@ -10,12 +10,12 @@ try:
     import curses
 except ImportError:
     try:
-        import windows_curses as curses  # Nome correto do pacote
+        import windows_curses as curses
 
         print("Using windows-curses fallback")
     except ImportError:
         print("Warning: curses not available - some features might not work")
-        curses = None  # Cria um objeto nulo para evitar erros
+        curses = None
 
 
 def main():
