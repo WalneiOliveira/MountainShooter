@@ -11,14 +11,17 @@ try:
 except ImportError:
     try:
         import windows_curses as curses
+
         print("Using windows-curses fallback")
     except ImportError:
         print("Warning: curses not available - some features might not work")
         curses = None
 
+
 def main():
     game = Game()
     game.run()
+
 
 if __name__ == "__main__":
     main()
