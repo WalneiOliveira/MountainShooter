@@ -30,8 +30,9 @@ jobs:
           dir
           dir /s /b asset || echo No asset directory
           dir /s /b code || echo No code directory
-          python -c "import windows_curses; print('windows-curses import successful')"
+          python -c "import curses; print('curses import successful')"
           python -c "from main import main; print('Main.py verified')"
+          python -c "from code.Game import Game; print('Game.py importado com sucesso')"
 
       - name: Build executable
         run: |
@@ -41,7 +42,7 @@ jobs:
             --name MountainShooter ^
             --add-data "asset/*;asset" ^
             --add-data "code/*;code" ^
-            --hidden-import windows_curses ^
+            --hidden-import curses ^
             --hidden-import code.Game ^
             main.py
 
