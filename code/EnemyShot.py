@@ -8,4 +8,5 @@ class EnemyShot(Entity):
         super().__init__(name, position)
 
     def move(self, ):
+        """Move the enemy shot to the left."""
         self.rect.centerx -= ENTITY_SPEED[self.name]

@@ -7,8 +7,13 @@ from code.PlayerShot import PlayerShot
 
 
 class EntityMediator:
+
     @staticmethod
     def __verify_collision_window(ent: Entity):
+        """ Check if an entity is out of the game window and set its health to 0 if it is.
+        :param ent: the entity to check
+        :return: None
+        """
         if isinstance(ent, Enemy):
             if ent.rect.right <= 0:
                 ent.health = 0
@@ -21,6 +26,12 @@ class EntityMediator:
 
     @staticmethod
     def __verify_collision_entity(ent1, ent2):
+        """
+        Check if two entities collide and apply damage if they do.
+        :param ent1:
+        :param ent2:
+        :return: None
+        """
         valid_interaction = False
         if isinstance(ent1, Enemy) and isinstance(ent2, PlayerShot):
             valid_interaction = True
@@ -43,6 +54,10 @@ class EntityMediator:
 
     @staticmethod
     def __give_score(enemy: Enemy, entity_list: list[Entity]):
+        """ Give score to the player who last damaged the enemy.
+        :param enemy: the enemy that was destroyed
+        :param entity_list: list of entities to find the player in
+        :return: None"""
         if enemy.last_dmg == 'Player1Shot':
             for ent in entity_list:
                 if ent.name == 'Player1':
@@ -52,21 +67,13 @@ class EntityMediator:
                 if ent.name == 'Player2':
                     ent.score += enemy.score
 
-    # @staticmethod
-    # def __give_score(enemy: Enemy, entity_list: list[Entity]):
-    #     shot_to_player = {
-    #         'Player1Shot': 'Player1',
-    #         'Player2Shot': 'Player2'
-    #     }
-    #     player_name = shot_to_player.get(enemy.last_dmg)
-    #     if player_name:
-    #         for ent in entity_list:
-    #             if ent.name == player_name:
-    #                 ent.score += enemy.score
-    #                 break
-
     @staticmethod
     def verify_collision(entity_list: list[Entity]):
+        """
+        Check for collisions between entities in the list.
+        :param entity_list: list of entities to check for collisions
+        :return: None
+        """
         for i in range(len(entity_list)):
             entity1 = entity_list[i]
             EntityMediator.__verify_collision_window(entity1)
@@ -76,6 +83,11 @@ class EntityMediator:
 
     @staticmethod
     def verify_health(entity_list: list[Entity]):
+        """
+        Check the health of entities in the list and remove them if health is 0 or less.
+        :param entity_list: list of entities to check for health
+        :return: None
+        """
         for ent in entity_list:
             if ent.health <= 0:
                 if isinstance(ent, Enemy):

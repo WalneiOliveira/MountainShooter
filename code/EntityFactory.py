@@ -11,7 +11,11 @@ from code.Player import Player
 class EntityFactory:
 
     @staticmethod
-    def get_entity(entity_name: str, position=(0, 0)):
+    def get_entity(entity_name: str) -> list | Player | Enemy | None:
+        """
+        :param entity_name: Name of the entity to create.
+        :return: List of Background objects, Player object, Enemy object, or None if the entity is not recognized.
+        """
         match entity_name:
             case 'Level1Bg':
                 list_bg = []

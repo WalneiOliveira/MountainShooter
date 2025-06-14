@@ -8,6 +8,7 @@ from code.Const import ENTITY_HEALTH, ENTITY_DAMAGE, ENTITY_SCORE
 
 
 class Entity(ABC):
+    """Base class for all entities in the game."""
     def __init__(self, name: str, position: tuple):
         self.name = name
         self.surf = pygame.image.load('./asset/' + name + '.png').convert_alpha()
@@ -20,4 +21,5 @@ class Entity(ABC):
 
     @abstractmethod
     def move(self):
+        """Abstract method to move the entity."""
         pass

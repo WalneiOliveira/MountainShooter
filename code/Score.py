@@ -11,15 +11,22 @@ from code.DBProxy import DBProxy
 
 class Score:
     """Class to handle the score screen in the game."""
+
     def __init__(self, window: Surface):
-        """"Initialize the Score class with the game window."""
         self.window = window
         self.surf = pygame.image.load('./asset/ScoreBg.png').convert_alpha()
         self.rect = self.surf.get_rect(left=0, top=0)
         pass
 
     def save(self, game_mode: str, player_score: list[int]):
-        """Save the score to the database and allow the player to enter their name."""
+        """
+        This method displays the score screen, prompts the player to enter their name.
+        It saves the player's score to the database and allows them to view the top scores.
+
+        params:
+            game_mode (str): The game mode selected by the player.
+            player_score (list[int]): The scores of the players or teams.
+        """
         pygame.mixer_music.load('./asset/Score.mp3')
         pygame.mixer_music.play(-1)
         db_proxy = DBProxy('DBScore')
@@ -94,7 +101,14 @@ class Score:
                         break
 
     def score_text(self, text_size: int, text: str, text_color: tuple, text_center_pos: tuple):
-        """Render text on the score screen."""
+        """Render text on the score screen.
+
+        params:
+            text_size (int): The size of the text.
+            text (str): The text to be displayed.
+            text_color (tuple): The color of the text in RGB format.
+            text_center_pos (tuple): The center position of the text on the screen.
+        """
         text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)
         text_surf: Surface = text_font.render(text, True, text_color).convert_alpha()
         text_rect: Rect = text_surf.get_rect(center=text_center_pos)

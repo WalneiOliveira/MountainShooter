@@ -11,9 +11,11 @@ class Enemy(Entity):
         self.shot_delay = ENTITY_SHOT_DELAY[self.name]
 
     def move(self):
+        """Move the enemy left or right based on its name."""
         self.rect.centerx -= ENTITY_SPEED[self.name]
 
     def shoot(self):
+        """Handle shooting logic for the enemy."""
         self.shot_delay -= 1
         if self.shot_delay == 0:
             self.shot_delay = ENTITY_SHOT_DELAY[self.name]

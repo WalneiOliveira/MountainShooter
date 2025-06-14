@@ -21,6 +21,11 @@ class Menu:
         """
         Displays the main menu and allows navigation via keyboard or mouse.
         Returns the selected menu option.
+        If the user selects an option, it returns the corresponding string.
+        If the user quits, it exits the game.
+        Returns: str: The selected menu option.
+        Raises: SystemExit: If the user quits the game.
+        Raises: pygame.error: If there is an issue with loading the menu background or music.
         """
         menu_option = 0
         pygame.mixer_music.load('./asset/Menu.mp3')
@@ -35,14 +40,14 @@ class Menu:
             option_rects = []
             for i in range(len(MENU_OPTION)):
                 rect = pygame.Rect(0, 0, 200, 30)  # Adjust width/height as needed
-                rect.center = (int(WIN_WIDTH / 2, 200 + 25 * i))
+                rect.center = (int(WIN_WIDTH / 2), 200 + 25 * i)
                 option_rects.append(rect)
                 if rect.collidepoint(mouse_pos):
                     menu_option = i
 
             for i in range(len(MENU_OPTION)):
                 color = C_YELLOW if i == menu_option else C_WHITE
-                self.menu_text(20, MENU_OPTION[i], color, ((WIN_WIDTH / 2), 200 + 25 * i))
+                self.menu_text(20, MENU_OPTION[i], color, (int(WIN_WIDTH / 2), 200 + 25 * i))
 
             pygame.display.flip()
 

@@ -64,6 +64,8 @@ cover/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+# Ignore DBScore file
+DBScore
 
 # Flask stuff:
 instance/
@@ -123,8 +125,6 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
-# Ignore DBScore file
-DBScore
 # Environments
 venv
 .env

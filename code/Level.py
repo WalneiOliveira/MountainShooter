@@ -6,8 +6,9 @@ import sys
 import pygame.display
 from pygame import Surface, Rect
 from pygame.font import Font
-from code.Const import C_WHITE, WIN_HEIGHT, MENU_OPTION, EVENT_ENEMY, SPAWN_TIME, C_GREEN, C_CYAN, EVENT_TIMEOUT, \
-    TIMEOUT_STEP, TIMEOUT_LEVEL
+from code.Const import (C_WHITE, WIN_HEIGHT, MENU_OPTION, EVENT_ENEMY,
+                        SPAWN_TIME, C_GREEN, C_CYAN, EVENT_TIMEOUT, \
+                        TIMEOUT_STEP, TIMEOUT_LEVEL)
 from code.Enemy import Enemy
 from code.Entity import Entity
 from code.EntityFactory import EntityFactory
@@ -16,6 +17,9 @@ from code.Player import Player
 
 
 class Level:
+    """Class to manage the game level, including entities, player scores, and game events.
+    This class handles the game loop, entity management, collision detection, and rendering of the game state.
+    """
     def __init__(self, window: Surface, name: str, game_mode: str, player_score: list[int]):
         self.timeout = TIMEOUT_LEVEL  # Timeout in milliseconds
         self.window = window
@@ -34,8 +38,13 @@ class Level:
         pygame.time.set_timer(EVENT_TIMEOUT, TIMEOUT_STEP)  # Timer for timeout events
 
     def run(self, player_score: list[int]):
+        """Main game loop for the level.
+        This method handles the rendering of entities, player input, and game events.
+        Args: player_score (list[int]): List to store player scores.
+        Returns: bool: True if the level was completed successfully, False if the players lost.
+        """
         pygame.mixer_music.load(f'./asset/{self.name}.mp3')
-        pygame.mixer_music.set_volume(0.3)
+        pygame.mixer_music.set_volume(0.2)
         pygame.mixer_music.play(-1)
         clock = pygame.time.Clock()
         while True:
@@ -90,6 +99,7 @@ class Level:
             pygame.display.flip()
 
     def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple):
+        """Render text on the game window."""
         text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)
         text_surf: Surface = text_font.render(text, True, text_color).convert_alpha()
         text_rect: Rect = text_surf.get_rect(left=text_pos[0], top=text_pos[1])

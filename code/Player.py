@@ -14,6 +14,9 @@ class Player(Entity):
         self.shot_delay = ENTITY_SHOT_DELAY[self.name]
 
     def move(self):
+        """ Moves the player based on key presses.
+        The player can move up, down, left, or right within the window boundaries.
+        """
         pressed_key = pygame.key.get_pressed()
         if pressed_key[PLAYER_KEY_UP[self.name]] and self.rect.top > 0:
             self.rect.centery -= ENTITY_SPEED[self.name]
@@ -26,6 +29,11 @@ class Player(Entity):
         pass
 
     def shoot(self):
+        """ Handles shooting logic for the player.
+        The player can shoot if the shot delay has elapsed.
+        Returns:
+            PlayerShot: A new PlayerShot instance if the player shoots, otherwise None.
+        """
         self.shot_delay -= 1
         if self.shot_delay == 0:
             self.shot_delay = ENTITY_SHOT_DELAY[self.name]

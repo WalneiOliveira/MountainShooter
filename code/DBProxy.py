@@ -25,7 +25,9 @@ class DBProxy:
 
     def close(self):
         """ Close the database connection."""
-        return self.connection.close()
+        if self.connection:
+            self.connection.close()
+            self.connection = None
 
     def clear_all(self):
         """ Clear all entries from the database."""

@@ -15,7 +15,12 @@ class Game:
         pygame.init()
         self.window = pygame.display.set_mode(size=(WIN_WIDTH, WIN_HEIGHT))
 
-    def run(self):
+    def run(self) -> None:
+        """ Run the game loop
+        :param self: Instance of the Game class
+        :return: None"""
+        pygame.display.set_caption('Wellcome to our Game!!')
+        self.window.fill((0, 0, 0))
         while True:
             score = Score(self.window)
             menu = Menu(self.window)
