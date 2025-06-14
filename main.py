@@ -1,5 +1,8 @@
 import os
 import sys
+
+import pygame
+
 from code.Game import Game
 
 # Configuração especial para o PyInstaller
