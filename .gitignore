@@ -123,6 +123,8 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
+# Ignore DBScore file
+DBScore
 # Environments
 venv
 .env
