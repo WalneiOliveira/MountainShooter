@@ -87,7 +87,7 @@ class Score:
         pygame.mixer_music.load('./asset/Score.mp3')
         pygame.mixer_music.play(-1)
         running = True
-        date = get_formatted_date()
+        name = ''
         while running:
             self.window.blit(source=self.surf, dest=self.rect)
             self.score_text(48, 'TOP 10 SCORE', C_YELLOW, SCORE_POS['Title'])
