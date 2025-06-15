@@ -1,11 +1,14 @@
 # C
 import pygame
 
-C_ORANGE = (255, 128, 0)
-C_YELLOW = (255, 255, 128)
+C_ORANGE = (255, 165, 0)
+C_YELLOW = (255, 255, 33)
 C_WHITE = (255, 255, 255)
 C_GREEN = (0, 128, 0)
 C_CYAN = (0, 128, 128)
+C_RED = (255, 0, 33)
+C_BLACK = (0, 0, 0)
+C_ALPHA = 80
 
 # E
 EVENT_ENEMY = pygame.USEREVENT + 1
@@ -23,8 +26,12 @@ ENTITY_SPEED = {
     'Level2Bg2': 2,
     'Level2Bg3': 3,
     'Level2Bg4': 4,
+    'Level3Bg0': 0,
+    'Level3Bg1': 1,
+    'Level3Bg2': 2,
+    'Level3Bg3': 3,
     'Player1': 3,
-    'Player1Shot': 1,
+    'Player1Shot': 2,
     'Player2': 3,
     'Player2Shot': 3,
     'Enemy1': 1,
@@ -46,9 +53,13 @@ ENTITY_HEALTH = {
     'Level2Bg2': 999,
     'Level2Bg3': 999,
     'Level2Bg4': 999,
-    'Player1': 300,
+    'Level3Bg0': 999,
+    'Level3Bg1': 999,
+    'Level3Bg2': 999,
+    'Level3Bg3': 999,
+    'Player1': 200,
     'Player1Shot': 1,
-    'Player2': 300,
+    'Player2': 200,
     'Player2Shot': 1,
     'Enemy1': 50,
     'Enemy1Shot': 1,
@@ -69,6 +80,10 @@ ENTITY_DAMAGE = {
     'Level2Bg2': 0,
     'Level2Bg3': 0,
     'Level2Bg4': 0,
+    'Level3Bg0': 0,
+    'Level3Bg1': 0,
+    'Level3Bg2': 0,
+    'Level3Bg3': 0,
     'Player1': 1,
     'Player1Shot': 25,
     'Player2': 1,
@@ -92,6 +107,10 @@ ENTITY_SCORE = {
     'Level2Bg2': 0,
     'Level2Bg3': 0,
     'Level2Bg4': 0,
+    'Level3Bg0': 0,
+    'Level3Bg1': 0,
+    'Level3Bg2': 0,
+    'Level3Bg3': 0,
     'Player1': 0,
     'Player1Shot': 0,
     'Player2': 0,
@@ -127,6 +146,7 @@ PLAYER_KEY_RIGHT = {'Player1': pygame.K_RIGHT,
                     'Player2': pygame.K_d}
 PLAYER_KEY_SHOOT = {'Player1': pygame.K_t,
                     'Player2': pygame.K_y}
+PADDING = 3.5  # Padding for text rendering
 
 # S
 SPAWN_TIME = 4000
@@ -141,6 +161,7 @@ WIN_HEIGHT = 324
 # S
 SCORE_POS = {'Title': (WIN_WIDTH / 2, 50),
              'EnterName': (WIN_WIDTH / 2, 80),
+             'Instruction': (WIN_WIDTH / 2, 80),
              'Label': (WIN_WIDTH / 2, 90),
              'Name': (WIN_WIDTH / 2, 110),
              0: (WIN_WIDTH / 2, 110),

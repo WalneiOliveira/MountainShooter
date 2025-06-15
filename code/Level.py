@@ -14,6 +14,7 @@ from code.Entity import Entity
 from code.EntityFactory import EntityFactory
 from code.EntityMediator import EntityMediator
 from code.Player import Player
+from code.Score import Score
 
 
 class Level:
@@ -44,9 +45,10 @@ class Level:
         Returns: bool: True if the level was completed successfully, False if the players lost.
         """
         pygame.mixer_music.load(f'./asset/{self.name}.mp3')
-        pygame.mixer_music.set_volume(0.2)
+        pygame.mixer_music.set_volume(0.3)
         pygame.mixer_music.play(-1)
         clock = pygame.time.Clock()
+
         while True:
             clock.tick(60)
             for ent in self.entity_list:

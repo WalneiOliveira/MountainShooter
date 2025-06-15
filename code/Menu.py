@@ -6,7 +6,7 @@ import pygame.image
 from pygame import Surface, Rect
 from pygame.font import Font
 
-from code.Const import WIN_WIDTH, C_ORANGE, MENU_OPTION, C_WHITE, C_YELLOW
+from code.Const import WIN_WIDTH, C_ORANGE, MENU_OPTION, C_WHITE, C_YELLOW, SCORE_POS, C_BLACK, C_ALPHA, PADDING
 
 
 class Menu:
@@ -24,16 +24,14 @@ class Menu:
         If the user selects an option, it returns the corresponding string.
         If the user quits, it exits the game.
         Returns: str: The selected menu option.
-        Raises: SystemExit: If the user quits the game.
-        Raises: pygame.error: If there is an issue with loading the menu background or music.
         """
         menu_option = 0
         pygame.mixer_music.load('./asset/Menu.mp3')
+        pygame.mixer_music.set_volume(0.1)
         pygame.mixer_music.play(-1)
         while True:
             self.window.blit(source=self.surf, dest=self.rect)
-            self.menu_text(50, "Mountain", C_ORANGE, ((WIN_WIDTH / 2), 70))
-            self.menu_text(50, "Shooter", C_ORANGE, ((WIN_WIDTH / 2), 120))
+            self.menu_text(50, "Mountain Shooter", C_YELLOW, ((WIN_WIDTH / 2), 70))
 
             mouse_pos = pygame.mouse.get_pos()
 
@@ -76,7 +74,13 @@ class Menu:
 
     def menu_text(self, text_size: int, text: str, text_color: tuple, text_center_pos: tuple):
         """Render text on the menu."""
+        padding = PADDING
+        frame_color = C_BLACK
+        frame_alpha = C_ALPHA
         text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)
         text_surf: Surface = text_font.render(text, True, text_color).convert_alpha()
         text_rect: Rect = text_surf.get_rect(center=text_center_pos)
-        self.window.blit(source=text_surf, dest=text_rect)
+        frame_surf = pygame.Surface((text_rect.width + 2 * padding, text_rect.height + 2 * padding), pygame.SRCALPHA)
+        frame_surf.fill((*frame_color, frame_alpha))
+        self.window.blit(frame_surf, (text_rect.x - padding, text_rect.y - padding))
+        self.window.blit(text_surf, text_rect)
