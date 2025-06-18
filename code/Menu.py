@@ -6,7 +6,8 @@ import pygame.image
 from pygame import Surface, Rect
 from pygame.font import Font
 
-from code.Const import WIN_WIDTH, C_ORANGE, MENU_OPTION, C_WHITE, C_YELLOW, SCORE_POS, C_BLACK, C_ALPHA, PADDING
+from code.Const import WIN_WIDTH, C_ORANGE, MENU_OPTION, C_WHITE, C_YELLOW, SCORE_POS, C_BLACK, C_ALPHA, PADDING, \
+    WIN_HEIGHT
 
 
 class Menu:
@@ -38,15 +39,16 @@ class Menu:
             option_rects = []
             for i in range(len(MENU_OPTION)):
                 rect = pygame.Rect(0, 0, 200, 30)  # Adjust width/height as needed
-                rect.center = (int(WIN_WIDTH / 2), 200 + 25 * i)
+                rect.center = (int(WIN_WIDTH / 2), 150 + 25 * i)
                 option_rects.append(rect)
                 if rect.collidepoint(mouse_pos):
                     menu_option = i
 
             for i in range(len(MENU_OPTION)):
                 color = C_YELLOW if i == menu_option else C_WHITE
-                self.menu_text(20, MENU_OPTION[i], color, (int(WIN_WIDTH / 2), 200 + 25 * i))
-
+                self.menu_text(20, MENU_OPTION[i], color, (int(WIN_WIDTH / 2), 150 + 25 * i))
+            text = 'Move: arrow (1 Player: LEFT, RIGHT, TOP, DOWN) | (2 player: W, S, A, D), Shoot (T, Y)'
+            self.menu_text(16, text, C_WHITE, (int(WIN_WIDTH / 2), WIN_HEIGHT - 40))
             pygame.display.flip()
 
             for event in pygame.event.get():
@@ -74,13 +76,13 @@ class Menu:
 
     def menu_text(self, text_size: int, text: str, text_color: tuple, text_center_pos: tuple):
         """Render text on the menu."""
-        padding = PADDING
-        frame_color = C_BLACK
-        frame_alpha = C_ALPHA
+        # padding = PADDING
+        # frame_color = C_BLACK
+        # frame_alpha = C_ALPHA
         text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)
         text_surf: Surface = text_font.render(text, True, text_color).convert_alpha()
         text_rect: Rect = text_surf.get_rect(center=text_center_pos)
-        frame_surf = pygame.Surface((text_rect.width + 2 * padding, text_rect.height + 2 * padding), pygame.SRCALPHA)
-        frame_surf.fill((*frame_color, frame_alpha))
-        self.window.blit(frame_surf, (text_rect.x - padding, text_rect.y - padding))
+        frame_surf = pygame.Surface((text_rect.width + 2 * PADDING, text_rect.height + 2 * PADDING), pygame.SRCALPHA)
+        frame_surf.fill((*C_BLACK, C_ALPHA))
+        self.window.blit(frame_surf, (text_rect.x - PADDING, text_rect.y - PADDING))
         self.window.blit(text_surf, text_rect)
